@@ -28,3 +28,4 @@ dist-offline
 # Lokale bestanden, niet publiceren
 cms-panel.html
 *.zip
+dist-offline
