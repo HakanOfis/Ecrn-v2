@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+# Offline tek dosyalık sürüm
+dist-offline
+
+# Lokale bestanden, niet publiceren
+cms-panel.html
+*.zip

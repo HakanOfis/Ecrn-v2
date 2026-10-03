@@ -1,273 +1,139 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/archivo/wdth.css";
 
-/* ============================================
-   ECRN Premium Dark Theme — Global Styles
-   ============================================ */
+@custom-variant dark (&:is(.dark *));
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap');
+:root {
+  /* Merkkleuren uit het logo: marineblauw kasteel + oranje vlag, asfalt als basis */
+  --navy: #13305e;
+  --ink: #0a1222;
+  --asphalt: #111a2c;
+  --orange: #f5a623;
+  --orange-deep: #d4891a;
+  --paper: #f3f4f7;
 
-/* --- Base Reset & Dark Theme --- */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  --background: #ffffff;
+  --foreground: #0d1526;
+  --card: #ffffff;
+  --card-foreground: #0d1526;
+  --popover: #ffffff;
+  --popover-foreground: #0d1526;
+  --primary: var(--navy);
+  --primary-foreground: #ffffff;
+  --secondary: #eceff4;
+  --secondary-foreground: #0d1526;
+  --muted: #eceff4;
+  --muted-foreground: #5b6478;
+  --accent: #fff1d6;
+  --accent-foreground: #0d1526;
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: #e2e6ee;
+  --input: #d5dbe6;
+  --ring: var(--orange);
+  --radius: 0.75rem;
 }
 
-html {
-  scroll-behavior: smooth;
-  overflow-x: hidden;
-}
+@theme inline {
+  --font-heading: "Archivo Variable", "Geist Variable", sans-serif;
+  --font-sans: "Geist Variable", system-ui, sans-serif;
+  --color-navy: var(--navy);
+  --color-ink: var(--ink);
+  --color-asphalt: var(--asphalt);
+  --color-orange: var(--orange);
+  --color-orange-deep: var(--orange-deep);
+  --color-paper: var(--paper);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
 
-body {
-  font-family: 'Inter', system-ui, sans-serif;
-  background: #0A0E1A;
-  color: #E8ECF1;
-  overflow-x: hidden;
-}
+  --animate-marquee: marquee 38s linear infinite;
+  --animate-stripes: stripes 1.2s linear infinite;
 
-/* --- Custom Scrollbar --- */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #0A0E1A;
-}
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #F5A623, #D4891A);
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #FFD073;
-}
-
-/* --- Selection --- */
-::selection {
-  background: #F5A62340;
-  color: #FFD073;
-}
-
-/* ============================================
-   3D CRANE TRUCK — BACKGROUND (Far, Small)
-   ============================================ */
-.truck-bg-container {
-  position: absolute;
-  bottom: 30%;
-  left: 0;
-  width: 100%;
-  height: 120px;
-  pointer-events: none;
-  z-index: 1;
-  perspective: 800px;
-}
-
-.truck-bg {
-  animation: truckBgMove 22s linear infinite;
-  transform-style: preserve-3d;
-  opacity: 0.2;
-  filter: blur(0.5px);
-}
-
-@keyframes truckBgMove {
-  0% { transform: translateX(105vw) scale(0.5) rotateY(-5deg); }
-  100% { transform: translateX(-130%) scale(0.5) rotateY(-5deg); }
-}
-
-/* ============================================
-   3D CRANE TRUCK — FOREGROUND (Close, Large)
-   ============================================ */
-.truck-fg-container {
-  position: absolute;
-  bottom: 8%;
-  left: 0;
-  width: 100%;
-  height: 200px;
-  pointer-events: none;
-  z-index: 5;
-  perspective: 600px;
-}
-
-.truck-fg {
-  animation: truckFgMove 16s linear infinite;
-  transform-style: preserve-3d;
-  opacity: 0.45;
-}
-
-@keyframes truckFgMove {
-  0% { transform: translateX(-130%) scale(1.15) rotateY(3deg); }
-  100% { transform: translateX(105vw) scale(1.15) rotateY(3deg); }
-}
-
-/* ============================================
-   CRANE ANIMATIONS  
-   ============================================ */
-.crane-boom {
-  transform-origin: bottom center;
-  animation: craneBoomLift 5s ease-in-out infinite;
-}
-
-@keyframes craneBoomLift {
-  0%, 100% { transform: rotate(18deg); }
-  50% { transform: rotate(32deg); }
-}
-
-.crane-telescope {
-  animation: craneTelescopeExtend 7s ease-in-out infinite;
-}
-
-@keyframes craneTelescopeExtend {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-18px); }
-}
-
-.crane-hook-line {
-  transform-origin: top center;
-  animation: hookLineSwing 3.5s ease-in-out infinite;
-}
-
-@keyframes hookLineSwing {
-  0%, 100% { transform: rotate(-4deg); }
-  50% { transform: rotate(4deg); }
-}
-
-/* ============================================
-   WHEEL SPIN
-   ============================================ */
-.wheel {
-  animation: wheelRotate 1s linear infinite;
-}
-
-@keyframes wheelRotate {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* ============================================
-   PARTICLE EFFECTS
-   ============================================ */
-.particle {
-  position: absolute;
-  width: 3px;
-  height: 3px;
-  background: #F5A623;
-  border-radius: 50%;
-  pointer-events: none;
-  animation: particleDrift 6s ease-in-out infinite;
-  box-shadow: 0 0 6px #F5A62360, 0 0 12px #F5A62330;
-}
-
-@keyframes particleDrift {
-  0% { 
-    transform: translateY(0) translateX(0) scale(1); 
-    opacity: 0;
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
   }
-  10% { opacity: 0.8; }
-  50% { 
-    transform: translateY(-80px) translateX(30px) scale(0.6); 
-    opacity: 0.4;
-  }
-  100% { 
-    transform: translateY(-160px) translateX(-20px) scale(0.2); 
-    opacity: 0;
+  @keyframes stripes {
+    to { background-position: 28px 0; }
   }
 }
 
-/* ============================================
-   ROAD EFFECTS
-   ============================================ */
-.road-line {
-  position: absolute;
-  height: 2px;
-  background: repeating-linear-gradient(
-    90deg,
-    #F5A62340 0px,
-    #F5A62340 20px,
-    transparent 20px,
-    transparent 40px
-  );
-  animation: roadScroll 2s linear infinite;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+    overflow-x: hidden;
+  }
+  h1, h2, h3, h4 {
+    @apply font-heading text-balance;
+    font-stretch: 82%;
+    letter-spacing: -0.015em;
+  }
+  ::selection {
+    background: var(--orange);
+    color: var(--ink);
+  }
 }
 
-@keyframes roadScroll {
-  0% { background-position: 0 0; }
-  100% { background-position: 40px 0; }
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+  /* Werfraster */
+  .grid-lines {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+  /* Signalisatie-strepen (oranje/donker) */
+  .hazard {
+    background-image: repeating-linear-gradient(-45deg, var(--orange) 0 14px, var(--ink) 14px 28px);
+    background-size: 40px 40px;
+  }
+  .text-orange-gradient {
+    background: linear-gradient(100deg, #ffc35c 0%, var(--orange) 45%, var(--orange-deep) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
 }
 
-/* ============================================
-   GLASSMORPHISM
-   ============================================ */
-.glass {
-  background: rgba(17, 22, 40, 0.65);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(245, 166, 35, 0.08);
-}
-
-.glass-card {
-  background: rgba(17, 22, 40, 0.5);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(245, 166, 35, 0.1);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.glass-card:hover {
-  background: rgba(17, 22, 40, 0.7);
-  border-color: rgba(245, 166, 35, 0.25);
-  box-shadow: 0 0 40px rgba(245, 166, 35, 0.08), 0 25px 50px rgba(0,0,0,0.3);
-  transform: translateY(-8px);
-}
-
-/* ============================================
-   GLOW EFFECTS
-   ============================================ */
-.glow-text {
-  text-shadow: 0 0 20px rgba(245, 166, 35, 0.3), 0 0 40px rgba(245, 166, 35, 0.15);
-}
-
-.glow-border {
-  box-shadow: 0 0 15px rgba(245, 166, 35, 0.1), inset 0 0 15px rgba(245, 166, 35, 0.05);
-}
-
-.glow-dot {
-  box-shadow: 0 0 8px #F5A623, 0 0 16px #F5A62350;
-}
-
-/* ============================================
-   GRID BACKGROUND
-   ============================================ */
-.bg-grid {
-  background-image: 
-    linear-gradient(rgba(245,166,35,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(245,166,35,0.04) 1px, transparent 1px);
-  background-size: 60px 60px;
-}
-
-/* ============================================
-   HEADLIGHT BEAM
-   ============================================ */
-.headlight {
-  position: absolute;
-  width: 80px;
-  height: 40px;
-  background: radial-gradient(ellipse at left, rgba(245,200,80,0.3), transparent 70%);
-  animation: headlightFlicker 2s ease-in-out infinite;
-  pointer-events: none;
-}
-
-@keyframes headlightFlicker {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.8; }
-}
-
-/* ============================================
-   RESPONSIVE
-   ============================================ */
-@media (max-width: 768px) {
-  .truck-bg { display: none; }
-  .truck-fg-container { bottom: 4%; }
-  .truck-fg { opacity: 0.25; }
-  
-  .particle:nth-child(n+6) { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }
