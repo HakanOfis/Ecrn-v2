@@ -5,10 +5,10 @@ import { defineConfig } from 'vite'
 import { viteSingleFile } from 'vite-plugin-singlefile'
 
 // https://vite.dev/config/
-// Online staat de site op GitHub Pages onder /ecrn-web-site/ (BASE_PATH overschrijft dit, bv. "/" bij een eigen domein).
+// Online staat de site op GitHub Pages onder /Ecrn-v2/ (BASE_PATH overschrijft dit, bv. "/" bij een eigen domein).
 // `vite build --mode offline` maakt één zelfstandig HTML-bestand dat met dubbelklik opent (file://).
 export default defineConfig(({ mode }) => ({
-  base: mode === 'offline' ? './' : (process.env.BASE_PATH ?? '/ecrn-web-site/'),
+  base: mode === 'offline' ? './' : (process.env.BASE_PATH ?? '/Ecrn-v2/'),
   plugins: [react(), tailwindcss(), mode === 'offline' && viteSingleFile()],
   resolve: {
     alias: {
