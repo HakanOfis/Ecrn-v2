@@ -29,20 +29,13 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { company } from "@/content/site";
-import kraanwagen from "@/assets/img/kraanwagen.webp";
-import nachtwerk from "@/assets/img/nachtwerk.webp";
-import sleufStraat from "@/assets/img/sleuf-straat.webp";
-import sleufLuchtfoto from "@/assets/img/sleuf-luchtfoto.webp";
-import verlichtingspaal from "@/assets/img/verlichtingspaal.webp";
-import asfaltHerstel from "@/assets/img/asfalt-herstel.webp";
-import hoogspanning from "@/assets/img/hoogspanning.webp";
+import { company, img } from "@/content/site";
 import { links, useI18n } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 const EASE = [0.22, 1, 0.36, 1];
 const SERVICE_ICONS = [Construction, UtilityPole, Wrench];
-const SERVICE_IMAGES = [sleufStraat, kraanwagen, asfaltHerstel];
+const SERVICE_IMAGES = [img.service1, img.service2, img.service3];
 const FLUVIUS_ICONS = [ShieldCheck, TrafficCone, Timer];
 const WHY_ICONS = [HardHat, Truck, MessageCircle, MapPin];
 
@@ -55,7 +48,7 @@ function Hero() {
 
   return (
     <section id="top" ref={ref} className="relative overflow-hidden bg-ink text-white">
-      <motion.img src={nachtwerk} alt="" style={{ y: bgY }} className="absolute inset-0 h-[120%] w-full object-cover opacity-25" />
+      <motion.img src={img.hero} alt="" style={{ y: bgY }} className="absolute inset-0 h-[120%] w-full object-cover opacity-25" />
       <div className="absolute inset-0 bg-gradient-to-b from-ink/70 via-ink/85 to-ink" />
       <div className="grid-lines absolute inset-0" aria-hidden="true" />
       <div className="absolute -top-40 left-1/3 size-[40rem] rounded-full bg-orange/10 blur-[160px]" aria-hidden="true" />
@@ -273,7 +266,7 @@ function Process() {
         <div className="lg:sticky lg:top-28 lg:self-start">
           <SectionHeading kicker={t.process.tag} title={t.process.h2} />
           <Reveal delay={0.1} className="mt-8 overflow-hidden rounded-[2rem]">
-            <img src={sleufLuchtfoto} alt="" loading="lazy" className="aspect-[4/3] w-full object-cover" />
+            <img src={img.process} alt="" loading="lazy" className="aspect-[4/3] w-full object-cover" />
           </Reveal>
         </div>
         <div className="relative pl-12 sm:pl-16">
@@ -336,7 +329,7 @@ function Area() {
   const { t } = useI18n();
   return (
     <section id="area" className="relative overflow-hidden bg-navy py-20 text-white sm:py-28">
-      <img src={hoogspanning} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-20" />
+      <img src={img.area} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-20" />
       <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/90 to-navy/60" />
       <div className="container-x relative grid items-center gap-14 lg:grid-cols-2">
         <div>
@@ -386,7 +379,7 @@ function Faq() {
         <div>
           <SectionHeading kicker={t.faq.tag} title={t.faq.h2} />
           <Reveal delay={0.1} className="mt-8 hidden overflow-hidden rounded-[2rem] lg:block">
-            <img src={verlichtingspaal} alt="" loading="lazy" className="aspect-[4/3] w-full object-cover" />
+            <img src={img.faq} alt="" loading="lazy" className="aspect-[4/3] w-full object-cover" />
           </Reveal>
         </div>
         <Reveal>
