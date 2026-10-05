@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECRN bvba - Yönetim Paneli</title>
+    <script src="https://cdn.jsdelivr.net/npm/@octokit/rest@20.1.1/dist-web/index.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: #800000;
+            color: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(128, 0, 0, 0.3);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .header p {
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            color: #800000;
+            font-size: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #444;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #800000;
+            box-shadow: 0 0 0 3px rgba(128, 0, 0, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #800000;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #660000;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(128, 0, 0, 0.3);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .file-upload {
+            border: 2px dashed #e0e0e0;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload:hover {
+            border-color: #800000;
+            background: rgba(128, 0, 0, 0.05);
+        }
+
+        .file-upload input {
+            display: none;
+        }
+
+        .preview-img {
+            max-width: 200px;
+            max-height: 200px;
+            margin-top: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .section-divider {
+            height: 2px;
+            background: #f0f0f0;
+            margin: 30px 0;
+        }
+
+        .logo-preview {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .logo-preview img {
+            width: 50px;
+            height: 50px;
+            object-contain: cover;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🏗️ ECRN bvba - Yönetim Paneli</h1>
+            <p>Web sitesi içeriğini ve görsellerini buradan yönetin</p>
+        </div>
+
+        <!-- GitHub Authentication -->
+        <div class="card">
+            <h2>🔑 GitHub Bağlantısı</h2>
+            <div class="form-group">
+                <label for="githubToken">GitHub Personal Access Token</label>
+                <input type="password" id="githubToken" placeholder="ghp_xxxxxxxxxxxx">
+                <small style="color: #666;">Token oluşturmak için: GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)</small>
+            </div>
+            <div class="form-group">
+                <label for="repoName">Depo Adı (Repository)</label>
+                <input type="text" id="repoName" placeholder="hakofis/ecrn-web-site" value="hakofis/ecrn-web-site">
+            </div>
+        </div>
+
+        <!-- Firma Bilgileri -->
+        <div class="card">
+            <h2>📋 Firma Bilgileri</h2>
+            <div class="grid">
+                <div class="form-group">
+                    <label for="companyName">Firma Adı</label>
+                    <input type="text" id="companyName" value="ECRN bvba">
+                </div>
+                <div class="form-group">
+                    <label for="ownerName">Yetkili Kişi</label>
+                    <input type="text" id="ownerName" value="HİDAYET OTER">
+                </div>
+            </div>
+            <div class="grid">
+                <div class="form-group">
+                    <label for="phone">Telefon</label>
+                    <input type="text" id="phone" value="+32 (0) 489/15 53 16">
+                </div>
+                <div class="form-group">
+                    <label for="email">E-posta</label>
+                    <input type="email" id="email" value="info@ecrn.be">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="address">Adres</label>
+                <input type="text" id="address" value="Lindestraat 43, 9160 Lokeren, Belçika">
+            </div>
+        </div>
+
+        <!-- Hero Bölümü -->
+        <div class="card">
+            <h2>🎯 Ana Sayfa (Hero)</h2>
+            <div class="form-group">
+                <label for="heroTitle">Ana Başlık</label>
+                <input type="text" id="heroTitle" value="Vinç Hizmetleri ve Kazı Çözümleri">
+            </div>
+            <div class="form-group">
+                <label for="heroSubtitle">Alt Başlık</label>
+                <textarea id="heroSubtitle">Belçika genelinde profesyonel vinçle aydınlatma direği dikimi ve cadde/sokaklarda kablo kanalı açma hizmetleri.</textarea>
+            </div>
+        </div>
+
+        <!-- Hizmetler -->
+        <div class="card">
+            <h2>🛠️ Hizmetler</h2>
+            
+            <h3 style="color: #800000; margin: 20px 0 10px; font-size: 16px;">1. Vinçli Direk Montajı</h3>
+            <div class="form-group">
+                <label for="service1Desc">Açıklama</label>
+                <textarea id="service1Desc">Yüksek kapasiteli vinçlerle güvenli aydınlatma direği dikimi ve montajı. Uzman operatör ekibi.</textarea>
+            </div>
+
+            <h3 style="color: #800000; margin: 20px 0 10px; font-size: 16px;">2. Altyapı Kazı İşleri</h3>
+            <div class="form-group">
+                <label for="service2Desc">Açıklama</label>
+                <textarea id="service2Desc">Fluvius kurallarına uygun kablo kanalı açma ve zemin hazırlığı. Güvenli ve hassas kazı çalışmaları.</textarea>
+            </div>
+
+            <h3 style="color: #800000; margin: 20px 0 10px; font-size: 16px;">3. Kanal Kapatma ve Restorasyon</h3>
+            <div class="form-group">
+                <label for="service3Desc">Açıklama</label>
+                <textarea id="service3Desc">Kablo döşeme sonrası dolgu ve zemin restorasyonu. Fluvius standartlarına uygun tamamlama.</textarea>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="card">
+            <h2>📄 Footer</h2>
+            <div class="form-group">
+                <label for="footerText">Footer Metni</label>
+                <input type="text" id="footerText" value="Vinç ve Kazı Hizmetleri">
+            </div>
+        </div>
+
+        <!-- Yayınlama -->
+        <div class="card">
+            <h2>🚀 Yayınla</h2>
+            <div class="form-group">
+                <label for="commitMessage">Commit Mesajı</label>
+                <input type="text" id="commitMessage" value="Güncelleme: Site içeriği güncellendi">
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-success" onclick="deployToGitHub()">
+                    ✨ Değişiklikleri Yayınla
+                </button>
+            </div>
+            <div id="status" class="status"></div>
+        </div>
+    </div>
+
+    <script>
+        // GitHub API Entegrasyonu
+        let octokit;
+
+        function initOctokit() {
+            const token = document.getElementById('githubToken').value;
+            if (!token) {
+                showStatus('Lütfen GitHub tokeninizi girin!', 'error');
+                return null;
+            }
+            return new Octokit.Octokit({ auth: token });
+        }
+
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+            statusDiv.style.display = 'block';
+        }
+
+        async function getFileContent(octokit, owner, repo, path) {
+            try {
+                const response = await octokit.repos.getContent({
+                    owner,
+                    repo,
+                    path,
+                });
+                return {
+                    content: atob(response.data.content),
+                    sha: response.data.sha,
+                };
+            } catch (error) {
+                console.error('Dosya okunamadı:', error);
+                return null;
+            }
+        }
+
+        async function updateFile(octokit, owner, repo, path, content, sha, message) {
+            try {
+                await octokit.repos.createOrUpdateFileContents({
+                    owner,
+                    repo,
+                    path,
+                    message,
+                    content: btoa(unescape(encodeURIComponent(content))),
+                    sha,
+                });
+                return true;
+            } catch (error) {
+                console.error('Dosya güncellenemedi:', error);
+                return false;
+            }
+        }
+
+        async function deployToGitHub() {
+            const repoFull = document.getElementById('repoName').value;
+            const [owner, repo] = repoFull.split('/');
+            
+            if (!owner || !repo) {
+                showStatus('Lütfen geçerli bir depo adı girin (örnek: hakofis/ecrn-web-site)', 'error');
+                return;
+            }
+
+            const octokit = initOctokit();
+            if (!octokit) return;
+
+            showStatus('Değişiklikler işleniyor...', 'success');
+
+            try {
+                // 1. index.html dosyasını al
+                const indexFile = await getFileContent(octokit, owner, repo, 'index.html');
+                if (!indexFile) {
+                    showStatus('index.html dosyası bulunamadı!', 'error');
+                    return;
+                }
+
+                let content = indexFile.content;
+
+                // 2. İçeriği güncelle
+                const companyName = document.getElementById('companyName').value;
+                const heroTitle = document.getElementById('heroTitle').value;
+                const heroSubtitle = document.getElementById('heroSubtitle').value;
+                const phone = document.getElementById('phone').value;
+                const email = document.getElementById('email').value;
+                const address = document.getElementById('address').value;
+                const footerText = document.getElementById('footerText').value;
+                const service1Desc = document.getElementById('service1Desc').value;
+                const service2Desc = document.getElementById('service2Desc').value;
+                const service3Desc = document.getElementById('service3Desc').value;
+
+                // Basit metin değişiklikleri (gerçek projede daha karmaşık bir yapı kullanın)
+                content = content.replace(/ECRN bvba/g, companyName);
+                content = content.replace(/\+32 \(0\) 489\/15 53 16/g, phone);
+                content = content.replace(/info@ecrn.be/g, email);
+
+                // 3. Dosyayı güncelle
+                const commitMessage = document.getElementById('commitMessage').value;
+                const success = await updateFile(octokit, owner, repo, 'index.html', content, indexFile.sha, commitMessage);
+
+                if (success) {
+                    showStatus('✅ Başarılı! Değişiklikler GitHub\'a gönderildi. GitHub Pages birkaç dakika içinde güncellenecektir.', 'success');
+                } else {
+                    showStatus('❌ Hata! Dosya güncellenemedi.', 'error');
+                }
+
+            } catch (error) {
+                console.error('Hata:', error);
+                showStatus('❌ Bir hata oluştu: ' + error.message, 'error');
+            }
+        }
+
+        // Sayfa yüklendiğinde varsayılan değerleri ayarla
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('ECRN Yönetim Paneli hazır!');
+        });
+    </script>
+</body>
+</html>
